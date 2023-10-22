@@ -1,0 +1,17 @@
+name: Rodar Pipeline
+on:
+  pull_request:
+    paths:
+      - '**/*.swift'
+
+
+jobs:
+  build: 
+    name: Build Project 
+    runs-on: macOS-latest
+    steps:
+    - name: Configurando Ambiente
+      uses: actions/checkout@v1
+
+    - name: Clean & Build & Test
+      run: xcodebuild clean build test -project StudySchedule/StudySchedule.xcodeproj -scheme StudySchedule -destination "platform=iOS Simulator,OS=17.0,name=iPhone 15 Pro"

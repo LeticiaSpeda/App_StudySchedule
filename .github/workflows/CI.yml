@@ -1,8 +1,7 @@
 name: Rodar Pipeline
 on:
   pull_request:
-    paths:
-      - '**/*.swift'
+    branches: ["main", "develop"] 
 
 
 jobs:

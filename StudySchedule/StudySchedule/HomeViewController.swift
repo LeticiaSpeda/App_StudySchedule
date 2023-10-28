@@ -12,27 +12,26 @@ class HomeViewController: UIViewController, ViewCode {
         return stack
     }()
 
-    private lazy var verticalStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 10
-        stack.enableViewCode()
-        return stack
-    }()
-
     private lazy var performanceCardView = CardResults(
-        image: UIImage(systemName: "cellularbars") ?? UIImage(),
+        image: UIImage(
+            systemName: "cellularbars"
+        ) ?? UIImage(),
         titleText: "89%",
         descriptionText: "Desempenho"
     )
 
     private lazy var timeCardView = CardResults(
-        image: UIImage(systemName: "deskclock") ?? UIImage(),
-        titleText: "16h 48m", descriptionText: "Tempo"
+        image: UIImage(
+            systemName: "deskclock"
+        ) ?? UIImage(),
+        titleText: "16h 48m",
+        descriptionText: "Tempo"
     )
 
     private lazy var exerciseCardView = CardResults(
-        image: UIImage(systemName: "list.bullet.rectangle.portrait") ?? UIImage(),
+        image: UIImage(
+            systemName: "list.bullet.rectangle.portrait"
+        ) ?? UIImage(),
         titleText: "332",
         descriptionText: "Exercícios"
     )
@@ -43,10 +42,19 @@ class HomeViewController: UIViewController, ViewCode {
         segmented.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).withAlphaComponent(0.2)
         segmented.selectedSegmentTintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         segmented.selectedSegmentIndex = 0
-        segmented.setTitleTextAttributes([.foregroundColor: UIColor.primary], for: .selected)
-        segmented.layer.cornerRadius = 12
+        segmented.setTitleTextAttributes([
+            .foregroundColor: UIColor.primary
+        ], for: .selected)
         segmented.enableViewCode()
         return segmented
+    }()
+
+    private lazy var storesSubjectsView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 28
+        view.enableViewCode()
+        return view
     }()
 
     override func viewDidLoad() {
@@ -61,14 +69,12 @@ class HomeViewController: UIViewController, ViewCode {
 
     func setupHierarchy() {
         view.addSubview(horizontalStack)
-        view.addSubview(verticalStack)
+        view.addSubview(periodSegmentedControl)
+        view.addSubview(storesSubjectsView)
 
         horizontalStack.addArrangedSubview(performanceCardView)
         horizontalStack.addArrangedSubview(timeCardView)
         horizontalStack.addArrangedSubview(exerciseCardView)
-
-        verticalStack.addArrangedSubview(periodSegmentedControl)
-        verticalStack.addArrangedSubview(UIView())
     }
 
     func setupConstraints() {
@@ -87,19 +93,32 @@ class HomeViewController: UIViewController, ViewCode {
             ),
             horizontalStack.heightAnchor.constraint(equalToConstant: 100),
 
-            verticalStack.topAnchor.constraint(
+            periodSegmentedControl.topAnchor.constraint(
                 equalTo: horizontalStack.bottomAnchor,
-                constant: 22
+                constant: 20
             ),
-            verticalStack.leadingAnchor.constraint(
+            periodSegmentedControl.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: 22
             ),
-            verticalStack.trailingAnchor.constraint(
+            periodSegmentedControl.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: -22
             ),
-            verticalStack.heightAnchor.constraint(equalToConstant: 600)
+
+            storesSubjectsView.topAnchor.constraint(
+                equalTo: periodSegmentedControl.bottomAnchor,
+                constant: 20
+            ),
+            storesSubjectsView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            storesSubjectsView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            ),
+            storesSubjectsView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+            )
 
         ])
     }

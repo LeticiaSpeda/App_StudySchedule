@@ -57,6 +57,17 @@ class HomeViewController: UIViewController, ViewCode {
         return view
     }()
 
+    private lazy var storesSubjectsTableView: UITableView = {
+        let table = UITableView()
+        table.delegate = self
+        table.dataSource = self
+        table.register(HomeViewCell.self, forCellReuseIdentifier: HomeViewCell.identifier)
+        table.backgroundColor = .white
+        table.separatorStyle = .none
+        table.enableViewCode()
+        return table
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
@@ -68,13 +79,15 @@ class HomeViewController: UIViewController, ViewCode {
     }
 
     func setupHierarchy() {
-        view.addSubview(horizontalStack)
-        view.addSubview(periodSegmentedControl)
-        view.addSubview(storesSubjectsView)
+        view.add(horizontalStack)
+        view.add(periodSegmentedControl)
+        view.add(storesSubjectsView)
 
         horizontalStack.addArrangedSubview(performanceCardView)
         horizontalStack.addArrangedSubview(timeCardView)
         horizontalStack.addArrangedSubview(exerciseCardView)
+
+        storesSubjectsView.addSubview(storesSubjectsTableView)
     }
 
     func setupConstraints() {
@@ -97,6 +110,13 @@ class HomeViewController: UIViewController, ViewCode {
             $0.trailing(reference: view.safeTrailing)
             $0.bottom(reference: view.bottom)
         }
+
+        storesSubjectsTableView.makeConstraint {
+            $0.top(reference: storesSubjectsView.top, padding: 16)
+            $0.leading(reference: storesSubjectsView.leading, padding: 16)
+            $0.trailing(reference: storesSubjectsView.trailing, padding: -16)
+            $0.bottom(reference: storesSubjectsView.bottom, padding: -16)
+        }
     }
 
     func setupStyle() {
@@ -116,5 +136,19 @@ class HomeViewController: UIViewController, ViewCode {
             target: self,
             action: #selector(handleList)
         )
+    }
+}
+
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 20
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return HomeViewCell()
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
     }
 }

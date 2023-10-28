@@ -2,24 +2,25 @@ import UIKit
 
 protocol ViewCode {
     func commonInit()
-    func configureHierachy()
-    func configureConstraints()
-    func configureStyle()
+    func setupHierarchy()
+    func setupConstraints()
+    func setupStyle()
 }
+
 extension UIView {
-    func translate() {
+    func enableViewCode() {
         translatesAutoresizingMaskIntoConstraints = false
     }
 }
 
 extension ViewCode {
     func commonInit() {
-        configureStyle()
-        configureHierachy()
-        configureConstraints()
+        setupStyle()
+        setupHierarchy()
+        setupConstraints()
     }
 
-    func configureStyle() {
+    func setupStyle() {
 
     }
 }

@@ -2,7 +2,7 @@ import UIKit
 
 class CardResults: UIView, ViewCode {
 
-    private var image: UIImage
+    private var image: UIImage?
     private var titleText: String
     private var descriptionText: String
 
@@ -10,7 +10,7 @@ class CardResults: UIView, ViewCode {
         let verticalStack = UIStackView()
         verticalStack.axis = .vertical
         verticalStack.distribution = .equalSpacing
-        verticalStack.translate()
+        verticalStack.enableViewCode()
         return verticalStack
     }()
 
@@ -18,7 +18,7 @@ class CardResults: UIView, ViewCode {
         let imageView = UIImageView(image: image)
         imageView.tintColor = .black
         imageView.contentMode = .scaleAspectFit
-        imageView.translate()
+        imageView.enableViewCode()
         return imageView
     }()
 
@@ -51,7 +51,7 @@ class CardResults: UIView, ViewCode {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
-    func configureHierachy() {
+    func setupHierarchy() {
         verticalStack.addArrangedSubview(iconImageView)
         verticalStack.addArrangedSubview(titleLabel)
         verticalStack.addArrangedSubview(descriptionLabel)
@@ -59,7 +59,7 @@ class CardResults: UIView, ViewCode {
         addSubview(verticalStack)
     }
 
-    func configureConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             verticalStack.topAnchor.constraint(
                 equalTo: safeAreaLayoutGuide.topAnchor,
@@ -80,7 +80,7 @@ class CardResults: UIView, ViewCode {
         ])
     }
 
-    func configureStyle() {
+    func setupStyle() {
         backgroundColor = .white
         layer.cornerRadius = 22
     }

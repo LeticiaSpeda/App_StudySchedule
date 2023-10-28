@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0CE4F112AEBE2500022A3B9 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0CE4F102AEBE2500022A3B9 /* HomeViewModel.swift */; };
 		E0DF9D542AE5B21A00DC184E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D532AE5B21A00DC184E /* AppDelegate.swift */; };
 		E0DF9D562AE5B21A00DC184E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D552AE5B21A00DC184E /* SceneDelegate.swift */; };
 		E0DF9D582AE5B21A00DC184E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D572AE5B21A00DC184E /* HomeViewController.swift */; };
@@ -14,8 +15,8 @@
 		E0DF9D602AE5B21C00DC184E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DF9D5E2AE5B21C00DC184E /* LaunchScreen.storyboard */; };
 		E0DF9D702AE5B92600DC184E /* StudyScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D6F2AE5B92600DC184E /* StudyScheduleTests.swift */; };
 		E0DF9D7E2AE696A300DC184E /* UIVIew+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D7D2AE696A300DC184E /* UIVIew+Extensions.swift */; };
-		E0DF9D832AE6A24800DC184E /* UIStackViewCustons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D822AE6A24800DC184E /* UIStackViewCustons.swift */; };
 		E0DF9D872AE6A7D400DC184E /* CardResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF9D862AE6A7D400DC184E /* CardResults.swift */; };
+		E0F405FB2AED552200D0AFA6 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F405FA2AED552200D0AFA6 /* UIColor+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E0CE4F102AEBE2500022A3B9 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		E0DF9D502AE5B21A00DC184E /* StudySchedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StudySchedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DF9D532AE5B21A00DC184E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0DF9D552AE5B21A00DC184E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,8 +41,8 @@
 		E0DF9D6D2AE5B92600DC184E /* StudyScheduleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StudyScheduleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DF9D6F2AE5B92600DC184E /* StudyScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyScheduleTests.swift; sourceTree = "<group>"; };
 		E0DF9D7D2AE696A300DC184E /* UIVIew+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIVIew+Extensions.swift"; sourceTree = "<group>"; };
-		E0DF9D822AE6A24800DC184E /* UIStackViewCustons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewCustons.swift; sourceTree = "<group>"; };
 		E0DF9D862AE6A7D400DC184E /* CardResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardResults.swift; sourceTree = "<group>"; };
+		E0F405FA2AED552200D0AFA6 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E0CE4F0F2AEBE1D10022A3B9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				E0CE4F102AEBE2500022A3B9 /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		E0DF9D472AE5B21A00DC184E = {
 			isa = PBXGroup;
 			children = (
@@ -83,11 +93,12 @@
 			isa = PBXGroup;
 			children = (
 				E0DF9D572AE5B21A00DC184E /* HomeViewController.swift */,
-				E0DF9D612AE5B21C00DC184E /* Info.plist */,
+				E0CE4F0F2AEBE1D10022A3B9 /* ViewModel */,
 				E0DF9D7F2AE6979700DC184E /* Customization */,
 				E0DF9D7C2AE6968C00DC184E /* Extensions */,
 				E0DF9D782AE66E4D00DC184E /* Assets */,
 				E0DF9D772AE66E3700DC184E /* Aplication */,
+				E0DF9D612AE5B21C00DC184E /* Info.plist */,
 			);
 			path = StudySchedule;
 			sourceTree = "<group>";
@@ -122,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				E0DF9D7D2AE696A300DC184E /* UIVIew+Extensions.swift */,
+				E0F405FA2AED552200D0AFA6 /* UIColor+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -129,7 +141,6 @@
 		E0DF9D7F2AE6979700DC184E /* Customization */ = {
 			isa = PBXGroup;
 			children = (
-				E0DF9D822AE6A24800DC184E /* UIStackViewCustons.swift */,
 				E0DF9D862AE6A7D400DC184E /* CardResults.swift */,
 			);
 			path = Customization;
@@ -261,11 +272,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0DF9D872AE6A7D400DC184E /* CardResults.swift in Sources */,
+				E0CE4F112AEBE2500022A3B9 /* HomeViewModel.swift in Sources */,
 				E0DF9D582AE5B21A00DC184E /* HomeViewController.swift in Sources */,
 				E0DF9D542AE5B21A00DC184E /* AppDelegate.swift in Sources */,
+				E0F405FB2AED552200D0AFA6 /* UIColor+Extensions.swift in Sources */,
 				E0DF9D7E2AE696A300DC184E /* UIVIew+Extensions.swift in Sources */,
 				E0DF9D562AE5B21A00DC184E /* SceneDelegate.swift in Sources */,
-				E0DF9D832AE6A24800DC184E /* UIStackViewCustons.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

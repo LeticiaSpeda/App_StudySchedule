@@ -1,60 +1,120 @@
 import UIKit
 
 class HomeViewController: UIViewController, ViewCode {
+    private var viewModel = HomeViewModel()
 
     private lazy var horizontalStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.spacing = 16
         stack.distribution = .fillEqually
-        stack.translate()
+        stack.enableViewCode()
         return stack
     }()
 
-    private lazy var performanceCardView = CardResults(image: UIImage(systemName: "cellularbars")!, titleText: "89%", descriptionText: "Desempenho")
+    private lazy var verticalStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 10
+        stack.enableViewCode()
+        return stack
+    }()
 
-    private lazy var timeCardView = CardResults(image: UIImage(systemName: "deskclock")!, titleText: "16h 48m", descriptionText: "Tempo")
+    private lazy var performanceCardView = CardResults(
+        image: UIImage(systemName: "cellularbars") ?? UIImage(),
+        titleText: "89%",
+        descriptionText: "Desempenho"
+    )
 
-    private lazy var exerciseCardView = CardResults(image: UIImage(systemName: "list.bullet.rectangle.portrait")!, titleText: "332", descriptionText: "Exercícios")
+    private lazy var timeCardView = CardResults(
+        image: UIImage(systemName: "deskclock") ?? UIImage(),
+        titleText: "16h 48m", descriptionText: "Tempo"
+    )
+
+    private lazy var exerciseCardView = CardResults(
+        image: UIImage(systemName: "list.bullet.rectangle.portrait") ?? UIImage(),
+        titleText: "332",
+        descriptionText: "Exercícios"
+    )
+
+    private lazy var periodSegmentedControl: UISegmentedControl = {
+        let itens = ["Semana", "Mês", "Total"]
+        let segmented = UISegmentedControl(items: itens)
+        segmented.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).withAlphaComponent(0.2)
+        segmented.selectedSegmentTintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        segmented.selectedSegmentIndex = 0
+        segmented.setTitleTextAttributes([.foregroundColor: UIColor.primary], for: .selected)
+        segmented.layer.cornerRadius = 12
+        segmented.enableViewCode()
+        return segmented
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
     }
 
-    @objc func handleList() {
-
+    @objc
+    func handleList() {
+        print("click")
     }
 
-    func configureHierachy() {
+    func setupHierarchy() {
         view.addSubview(horizontalStack)
+        view.addSubview(verticalStack)
 
         horizontalStack.addArrangedSubview(performanceCardView)
         horizontalStack.addArrangedSubview(timeCardView)
         horizontalStack.addArrangedSubview(exerciseCardView)
+
+        verticalStack.addArrangedSubview(periodSegmentedControl)
+        verticalStack.addArrangedSubview(UIView())
     }
 
-    func configureConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
-            horizontalStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 22),
-            horizontalStack.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 22),
-            horizontalStack.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -22),
-            horizontalStack.heightAnchor.constraint(equalToConstant: 100)
+            horizontalStack.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: 22
+            ),
+            horizontalStack.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: 22
+            ),
+            horizontalStack.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -22
+            ),
+            horizontalStack.heightAnchor.constraint(equalToConstant: 100),
+
+            verticalStack.topAnchor.constraint(
+                equalTo: horizontalStack.bottomAnchor,
+                constant: 22
+            ),
+            verticalStack.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: 22
+            ),
+            verticalStack.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: -22
+            ),
+            verticalStack.heightAnchor.constraint(equalToConstant: 600)
+
         ])
     }
 
-    func configureStyle() {
-        let now = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE dd 'de' MMMM"
-        formatter.locale = Locale(identifier: "pt-BR")
+    func setupStyle() {
+        view.backgroundColor = .primary
+        setupNavigationBar()
+    }
 
-        view.backgroundColor = #colorLiteral(red: 0.2784313725, green: 0.3450980392, blue: 0.7215686275, alpha: 1)
-        navigationItem.title = formatter.string(from: now)
-
+    private func setupNavigationBar() {
+        navigationItem.title = viewModel.getTitle()
         navigationController?.navigationBar.tintColor = .white
-
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white
+        ]
         navigationItem.leftBarButtonItem = .init(
             image: UIImage(systemName: "text.justify"),
             style: .done,

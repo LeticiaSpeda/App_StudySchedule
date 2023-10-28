@@ -78,49 +78,25 @@ class HomeViewController: UIViewController, ViewCode {
     }
 
     func setupConstraints() {
-        NSLayoutConstraint.activate([
-            horizontalStack.topAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.topAnchor,
-                constant: 22
-            ),
-            horizontalStack.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 22
-            ),
-            horizontalStack.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -22
-            ),
-            horizontalStack.heightAnchor.constraint(equalToConstant: 100),
+        horizontalStack.makeConstraint {
+            $0.top(reference: view.safeTop, padding: 22)
+            $0.leading(reference: view.safeLeading, padding: 22)
+            $0.trailing(reference: view.safeTrailing, padding: -22)
+            $0.height(100)
+        }
 
-            periodSegmentedControl.topAnchor.constraint(
-                equalTo: horizontalStack.bottomAnchor,
-                constant: 20
-            ),
-            periodSegmentedControl.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: 22
-            ),
-            periodSegmentedControl.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -22
-            ),
+        periodSegmentedControl.makeConstraint {
+            $0.top(reference: horizontalStack.bottom, padding: 20)
+            $0.leading(reference: view.safeLeading, padding: 22)
+            $0.trailing(reference: view.safeTrailing, padding: -22)
+        }
 
-            storesSubjectsView.topAnchor.constraint(
-                equalTo: periodSegmentedControl.bottomAnchor,
-                constant: 20
-            ),
-            storesSubjectsView.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor
-            ),
-            storesSubjectsView.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor
-            ),
-            storesSubjectsView.bottomAnchor.constraint(
-                equalTo: view.bottomAnchor
-            )
-
-        ])
+        storesSubjectsView.makeConstraint {
+            $0.top(reference: periodSegmentedControl.bottom, padding: 20)
+            $0.leading(reference: view.safeLeading)
+            $0.trailing(reference: view.safeTrailing)
+            $0.bottom(reference: view.bottom)
+        }
     }
 
     func setupStyle() {

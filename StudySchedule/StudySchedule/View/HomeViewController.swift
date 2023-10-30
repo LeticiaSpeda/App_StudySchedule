@@ -93,7 +93,7 @@ class HomeViewController: UIViewController, ViewCode {
                 }
             }
         }
-
+//
         apiService.loadExercises { result in
             DispatchQueue.main.async {
                 switch result {
@@ -105,6 +105,25 @@ class HomeViewController: UIViewController, ViewCode {
                         title: "Tivemos um falha no sistema",
                         message: "Nao foi possivel carregar suas informacoes sobre os exericicios (\(error.localizedDescription))",
                         preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    self.present(alert, animated: true)
+                }
+            }
+        }
+        //
+
+        apiService.loadTime { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let timer):
+                    self.timeCardView.setText("\(timer.duration)")
+                case .failure(let error):
+                    self.timeCardView.setText("Indisponivel")
+                    let alert = UIAlertController(
+                        title: "Tivemos um falha no sistema",
+                        message: "Nao foi possivel carregar suas informacoes sobre os exericicios (\(error.localizedDescription))",
+                        preferredStyle: .alert
+                    )
                     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
                     self.present(alert, animated: true)
                 }

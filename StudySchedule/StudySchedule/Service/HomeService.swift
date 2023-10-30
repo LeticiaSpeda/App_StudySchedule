@@ -9,6 +9,11 @@ struct Exercises: Decodable {
     let exerciseStudied: Int
 }
 
+struct Times: Decodable {
+    let date: String
+    let duration: Int
+}
+
 class HomeService {
     struct NoDataError: Error {}
     struct NoRespondeError: Error {}
@@ -20,6 +25,9 @@ class HomeService {
 
     typealias ExercisesResult = Result<Exercises, Error>
     typealias ExerciseCompletion = (ExercisesResult) -> Void
+
+    typealias TimesResult = Result<Times, Error>
+    typealias TimesCompletion = (TimesResult) -> Void
 
     func loadPerformance(completion: @escaping PerformanceCompletion) {
         let url = "http://localhost:3000/performance"
@@ -75,7 +83,7 @@ class HomeService {
 
     func loadExercises(completion: @escaping ExerciseCompletion) {
 
-        //url local do backend
+        // url local do backend
         let url = "http://localhost:3000/exercises"
 
         // adicionando a urlRequest para poder configurar
@@ -93,7 +101,6 @@ class HomeService {
         // dizendo que o objeto e do tipo json
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-
         // configura a chamada da api
         URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
 
@@ -104,9 +111,9 @@ class HomeService {
             guard let response = response as? HTTPURLResponse else {
                 return completion(.failure(NoRespondeError()))
             }
-            
+
             // verifica se o status da resposta e sucesso caso nao
-            //seja devolve dizendo que nao tem
+            // seja devolve dizendo que nao tem
             guard response.statusCode == 200 else {
                 return completion(.failure(InvalidStatusCodeError()))
             }
@@ -129,6 +136,40 @@ class HomeService {
 
         }
         // realiza a chamada da api
+        .resume()
+    }
+
+    func loadTime(completion: @escaping TimesCompletion) {
+        let url = "http://localhost:3000/timeSpend"
+        var urlRequest = URLRequest(url: URL(string: url)!)
+        urlRequest.httpMethod = "POST"
+        urlRequest.httpBody = try? JSONSerialization.data(
+            withJSONObject: ["date": "2023-10-30T19:43:04.915Z"],
+            options: .prettyPrinted
+        )
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: urlRequest) { data, response, _ in
+
+            guard let data else { return completion(.failure(NoDataError()))}
+
+            guard let response = response as? HTTPURLResponse else {
+                return completion(.failure(NoRespondeError()))
+            }
+
+            guard response.statusCode == 200 else {
+                return completion(.failure(InvalidStatusCodeError()))
+            }
+
+            let decoder = JSONDecoder()
+
+            guard let decodifier = try? decoder.decode(Times.self, from: data) else {
+                return completion(.failure(NotIdentifiedError()))
+            }
+
+            completion(.success(decodifier))
+        }
+
         .resume()
     }
 }

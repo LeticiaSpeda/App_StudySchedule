@@ -2,6 +2,7 @@ import UIKit
 
 class HomeViewController: UIViewController, ViewCode {
     private var viewModel = HomeViewModel()
+    private let apiService = HomeService()
 
     private lazy var horizontalStack: UIStackView = {
         let stack = UIStackView()
@@ -61,16 +62,54 @@ class HomeViewController: UIViewController, ViewCode {
         let table = UITableView()
         table.delegate = self
         table.dataSource = self
-        table.register(HomeViewCell.self, forCellReuseIdentifier: HomeViewCell.identifier)
         table.backgroundColor = .white
         table.separatorStyle = .none
         table.enableViewCode()
+        table.register(
+            HomeViewCell.self,
+            forCellReuseIdentifier: HomeViewCell.identifier
+        )
         return table
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
+
+        apiService.loadPerformance { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let performance):
+                    self.performanceCardView.setText("\(performance.performance)%")
+                case .failure(let error):
+                    self.performanceCardView.setText("Indisponivel")
+                    let alert = UIAlertController(
+                        title: "Tivemos uma falha no sistema",
+                        message: "Por favor, tente novamente mais tarde! (\(error.localizedDescription))",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    self.present(alert, animated: true)
+                }
+            }
+        }
+
+        apiService.loadExercises { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let exercise):
+                    self.exerciseCardView.setText("\(exercise.exerciseStudied)")
+                case .failure(let error):
+                    self.exerciseCardView.setText("Indisponivel")
+                    let alert = UIAlertController(
+                        title: "Tivemos um falha no sistema",
+                        message: "Nao foi possivel carregar suas informacoes sobre os exericicios (\(error.localizedDescription))",
+                        preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                    self.present(alert, animated: true)
+                }
+            }
+        }
     }
 
     @objc

@@ -51,6 +51,10 @@ class CardResults: UIView, ViewCode {
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
 
+    func setText(_ text: String) {
+        titleLabel.text = text
+    }
+
     func setupHierarchy() {
         verticalStack.addArrangedSubview(iconImageView)
         verticalStack.addArrangedSubview(titleLabel)

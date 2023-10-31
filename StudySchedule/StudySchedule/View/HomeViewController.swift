@@ -93,7 +93,7 @@ class HomeViewController: UIViewController, ViewCode {
                 }
             }
         }
-//
+        //
         apiService.loadExercises { result in
             DispatchQueue.main.async {
                 switch result {
@@ -116,12 +116,16 @@ class HomeViewController: UIViewController, ViewCode {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let timer):
-                    self.timeCardView.setText("\(timer.duration)")
+                    let durarionInSeconds = timer.duration / 1000
+                    let hours = durarionInSeconds / 3600
+                    let minutes = (durarionInSeconds % 3600) / 60
+                    let result = "\(hours)h \(minutes)m"
+                    self.timeCardView.setText("\(result)")
                 case .failure(let error):
                     self.timeCardView.setText("Indisponivel")
                     let alert = UIAlertController(
                         title: "Tivemos um falha no sistema",
-                        message: "Nao foi possivel carregar suas informacoes sobre os exericicios (\(error.localizedDescription))",
+                        message: "Nao foi possivel carregar suas informacoes sobre os exericicios \(error.localizedDescription)",
                         preferredStyle: .alert
                     )
                     alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))

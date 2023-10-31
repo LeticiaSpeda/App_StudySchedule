@@ -17,7 +17,7 @@ class HomeViewController: UIViewController, ViewCode {
         image: UIImage(
             systemName: "cellularbars"
         ) ?? UIImage(),
-        titleText: "89%",
+        titleText: "",
         descriptionText: "Desempenho"
     )
 
@@ -25,7 +25,7 @@ class HomeViewController: UIViewController, ViewCode {
         image: UIImage(
             systemName: "deskclock"
         ) ?? UIImage(),
-        titleText: "16h 48m",
+        titleText: "",
         descriptionText: "Tempo"
     )
 
@@ -33,7 +33,7 @@ class HomeViewController: UIViewController, ViewCode {
         image: UIImage(
             systemName: "list.bullet.rectangle.portrait"
         ) ?? UIImage(),
-        titleText: "332",
+        titleText: "",
         descriptionText: "Exercícios"
     )
 
@@ -75,69 +75,72 @@ class HomeViewController: UIViewController, ViewCode {
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
-
-        apiService.loadPerformance { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let performance):
-                    self.performanceCardView.setText("\(performance.performance)%")
-                case .failure(let error):
-                    self.performanceCardView.setText("Indisponivel")
-                    let alert = UIAlertController(
-                        title: "Tivemos uma falha no sistema",
-                        message: "Por favor, tente novamente mais tarde! (\(error.localizedDescription))",
-                        preferredStyle: .alert
-                    )
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                    self.present(alert, animated: true)
-                }
-            }
-        }
-        //
-        apiService.loadExercises { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let exercise):
-                    self.exerciseCardView.setText("\(exercise.exerciseStudied)")
-                case .failure(let error):
-                    self.exerciseCardView.setText("Indisponivel")
-                    let alert = UIAlertController(
-                        title: "Tivemos um falha no sistema",
-                        message: "Nao foi possivel carregar suas informacoes sobre os exericicios (\(error.localizedDescription))",
-                        preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                    self.present(alert, animated: true)
-                }
-            }
-        }
-        //
-
-        apiService.loadTime { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let timer):
-                    let durarionInSeconds = timer.duration / 1000
-                    let hours = durarionInSeconds / 3600
-                    let minutes = (durarionInSeconds % 3600) / 60
-                    let result = "\(hours)h \(minutes)m"
-                    self.timeCardView.setText("\(result)")
-                case .failure(let error):
-                    self.timeCardView.setText("Indisponivel")
-                    let alert = UIAlertController(
-                        title: "Tivemos um falha no sistema",
-                        message: "Nao foi possivel carregar suas informacoes sobre os exericicios \(error.localizedDescription)",
-                        preferredStyle: .alert
-                    )
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-                    self.present(alert, animated: true)
-                }
-            }
-        }
+        loadData()
     }
 
     @objc
     func handleList() {
         print("click")
+    }
+
+    private func loadData() {
+        handlerPerformanceResult()
+        handleTimeResult()
+        handlerExerciseResult()
+    }
+
+    private func handlerPerformanceResult() {
+        apiService.loadPerformance { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let performance):
+                    self?.performanceCardView.setText("\(performance.performance)%")
+                case .failure(let error):
+                    self?.performanceCardView.setText("Indisponível")
+                    self?.presentErrorAlert("Erro no sistema", message: "Tente novamente mais tarde! (\(error.localizedDescription))")
+                }
+            }
+        }
+    }
+
+    private func handleTimeResult() {
+        apiService.loadTime { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let timer):
+                    self?.updateTimeCard(with: timer.duration)
+                case .failure(let error):
+                    self?.presentErrorAlert("Erro no sistema", message: "Não foi possível carregar informações sobre o tempo (\(error.localizedDescription))")
+                }
+            }
+        }
+    }
+
+    private func handlerExerciseResult() {
+        apiService.loadExercises { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let exercise):
+                    self?.exerciseCardView.setText("\(exercise.exerciseStudied)")
+                case .failure(let error):
+                    self?.exerciseCardView.setText("Indisponível")
+                    self?.presentErrorAlert("Erro no sistema", message: "Não foi possível carregar informações sobre os exercícios (\(error.localizedDescription))")
+                }
+            }
+        }
+    }
+
+    private func updateTimeCard(with duration: Int) {
+        let hours = duration / 3600000
+        let minutes = (duration % 3600000) / 60000
+        let timeText = "\(hours)h \(minutes)m"
+        timeCardView.setText(timeText)
+    }
+
+    private func presentErrorAlert(_ title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
+        self.present(alert, animated: true)
     }
 
     func setupHierarchy() {

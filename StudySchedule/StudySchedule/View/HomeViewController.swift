@@ -1,8 +1,10 @@
 import UIKit
 
 class HomeViewController: UIViewController, ViewCode {
-    private var viewModel = HomeViewModel()
+    private let viewModel = HomeViewModel()
     private let apiService = HomeService()
+    private let homeCell = HomeViewCell()
+    var studies: [Study] = []
 
     private lazy var horizontalStack: UIStackView = {
         let stack = UIStackView()
@@ -76,6 +78,7 @@ class HomeViewController: UIViewController, ViewCode {
         super.viewDidLoad()
         commonInit()
         loadData()
+        storesSubjectsTableView.reloadData()
     }
 
     @objc
@@ -87,6 +90,7 @@ class HomeViewController: UIViewController, ViewCode {
         handlerPerformanceResult()
         handleTimeResult()
         handlerExerciseResult()
+        handleStudyResult()
     }
 
     private func handlerPerformanceResult() {
@@ -97,7 +101,10 @@ class HomeViewController: UIViewController, ViewCode {
                     self?.performanceCardView.setText("\(performance.performance)%")
                 case .failure(let error):
                     self?.performanceCardView.setText("Indisponível")
-                    self?.presentErrorAlert("Erro no sistema", message: "Tente novamente mais tarde! (\(error.localizedDescription))")
+                    self?.presentErrorAlert(
+                        "Erro no sistema",
+                        message: "Tente novamente mais tarde! (\(error.localizedDescription))"
+                    )
                 }
             }
         }
@@ -108,9 +115,13 @@ class HomeViewController: UIViewController, ViewCode {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let timer):
-                    self?.updateTimeCard(with: timer.duration)
+                    let time = self?.setupTime(with: timer.duration) ?? String()
+                    self?.timeCardView.setText(time)
                 case .failure(let error):
-                    self?.presentErrorAlert("Erro no sistema", message: "Não foi possível carregar informações sobre o tempo (\(error.localizedDescription))")
+                    self?.presentErrorAlert(
+                        "Erro no sistema",
+                        message: "Não foi possível carregar informações sobre o tempo (\(error.localizedDescription))"
+                    )
                 }
             }
         }
@@ -124,23 +135,42 @@ class HomeViewController: UIViewController, ViewCode {
                     self?.exerciseCardView.setText("\(exercise.exerciseStudied)")
                 case .failure(let error):
                     self?.exerciseCardView.setText("Indisponível")
-                    self?.presentErrorAlert("Erro no sistema", message: "Não foi possível carregar informações sobre os exercícios (\(error.localizedDescription))")
+                    self?.presentErrorAlert(
+                        "Erro no sistema",
+                        message: "Não foi possível carregar informações sobre os exercícios (\(error.localizedDescription))"
+                    )
                 }
             }
         }
     }
 
-    private func updateTimeCard(with duration: Int) {
+    private func handleStudyResult() {
+        apiService.loadStudies { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    self?.studies =  data.studies
+                    self?.storesSubjectsTableView.reloadData()
+                case .failure(let error):
+                    self?.presentErrorAlert(
+                        "Erro no sistema",
+                        message: "Não foi possível carregar informações sobre as materias (\(error.localizedDescription))"
+                    )
+                }
+            }
+        }
+    }
+
+    private func setupTime(with duration: Int) -> String {
         let hours = duration / 3600000
         let minutes = (duration % 3600000) / 60000
-        let timeText = "\(hours)h \(minutes)m"
-        timeCardView.setText(timeText)
+        return "\(hours)h \(minutes)m"
     }
 
     private func presentErrorAlert(_ title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel))
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
 
     func setupHierarchy() {
@@ -206,14 +236,23 @@ class HomeViewController: UIViewController, ViewCode {
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return studies.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return HomeViewCell()
+        if let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewCell.identifier, for: indexPath) as? HomeViewCell {
+            let study = studies[indexPath.row]
+
+            cell.titleLabel.text = study.subject
+            cell.timeLabel.text = "\(setupTime(with: study.timeSpend))"
+            cell.numberExerciceLabel.text = "\(study.totalExercises)"
+
+            return cell
+        }
+        return UITableViewCell()
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        return 1
     }
 }

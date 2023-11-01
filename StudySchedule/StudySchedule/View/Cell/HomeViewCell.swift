@@ -39,9 +39,8 @@ final class HomeViewCell: UITableViewCell, ViewCode {
         return imageView
     }()
 
-    private lazy var titleLabel: UILabel = {
+    private(set) lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Matemática"
         label.textColor = .white
         label.font = .boldSystemFont(ofSize: 18)
         label.enableViewCode()
@@ -57,18 +56,16 @@ final class HomeViewCell: UITableViewCell, ViewCode {
         return label
     }()
 
-    private lazy var timeLabel: UILabel = {
+    private(set) lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "05h 08m"
         label.textColor = .white
         label.font = .boldSystemFont(ofSize: 14)
         label.enableViewCode()
         return label
     }()
 
-    private lazy var numberExerciceLabel: UILabel = {
+    private(set) lazy var numberExerciceLabel: UILabel = {
         let label = UILabel()
-        label.text = "128"
         label.textColor = .white
         label.font = .boldSystemFont(ofSize: 14)
         label.enableViewCode()
